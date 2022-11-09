@@ -3,29 +3,27 @@ Github automatic clone and pull to local machine
 
 Preparations
 
-0) Install github cli, eg. gh-command
-1) Authenticate gh-cli: https://cli.github.com/manual/gh_auth_login
+- Install github cli, eg. gh-command
+- Authenticate gh-cli: https://cli.github.com/manual/gh_auth_login
    Create an personal access token (old style) and use that to authenticate
    gh command
+- Make an backup directory and modify conf.ini to match that directory
 
-2) Make an backup directory and modify conf.ini to match that directory
-
-3) Modify conf.ini organizations to match your username and possible organizations
+- Modify conf.ini organizations to match your username and possible organizations
 
 Example configuration conf-example.ini should be copied to conf.ini
 
 
 This script does following:
 
-1) lists repositories from user/organization and outputs them to file
-2) parses that file and for each repository a separate thread is launced which
-   a) sees if repository directory exists, if not, creates is by clone
-   b) if it exists, issues an pull
-
+- Lists repositories from user/organization and outputs them to file
+- parses that file and for each repository a separate thread is launced which
+  - sees if repository directory exists, if not, creates is by clone
+  - if it exists, issues an pull
 
 Crontab entry for cloning repositories at the end of day:
 
-55 16 * * * /home/user/bin/github-backup/github-backup.py >> /a/git/github-backup/runlog.log
+`55 16 * * * /home/user/bin/github-backup/github-backup.py >> /a/git/github-backup/runlog.log`
 
 
 Normal first run
