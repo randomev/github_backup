@@ -1,7 +1,22 @@
 # GITHUB BACKUP
 Github automatic clone and pull to local machine
 
-Preparations
+This scripts automates querying and backing up repositories from
+multiple users or organizations. It makes following directory structure
+
+```
+github-backup/ORG1_repo1
+github-backup/ORG1_repo1
+github-backup/USER1_repo1
+github-backup/USER1_repo2
+```
+
+where each repository is either cloned (1st time) or pulled to.
+This is meant to be used as a daily crontab job as a simple backup for
+all the organization source codes to local servers.
+
+
+## Preparations
 
 - Install github cli, eg. gh-command
 - Authenticate gh-cli: https://cli.github.com/manual/gh_auth_login
