@@ -28,10 +28,10 @@ Crontab entry for cloning repositories at the end of day:
 55 16 * * * /home/user/bin/github-backup/github-backup.py >> /a/git/github-backup/runlog.log
 
 
-## Normal first run
+Normal first run
 
-henkka@sun:~/bin/github_backup$ ./github-backup.py
----------------------
+`./github-backup.py`
+```
 Start ... 2022-11-09 17:14:58
 Printing repos to /a/git/github-backup/ORG1_repos.txt
 ORG1_repo1- clone
@@ -45,12 +45,12 @@ remote: Enumerating objects: 71, done.
 ...
 ...
 End 2022-11-09 17:18:17
-
+```
 
 And then subsequent runs should either pull or report up to date
 
-henkka@sun:~/bin/github_backup$ ./github-backup.py
----------------------
+`./github-backup.py`
+```
 Start ... 2022-11-09 18:14:58
 ...
 USER1_repo1 - pull
@@ -58,4 +58,4 @@ USER1_repo1 : Already up to date.
 ...
 
 End 2022-11-09 17:18:17
-
+```
