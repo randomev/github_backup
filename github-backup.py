@@ -13,14 +13,15 @@ import json
 
 
 def read_config():
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     config = configparser.ConfigParser()
-    config.read('conf.ini')
+    config.read(os.path.join(__location__, 'conf.ini'))
     return config
 
 # thread function for each repository
 def handle_repo(repo,org,repodir):
     
-    repopath = repodir + "/" + org + "_" + repo
+    repopath = os.path.join(repodir, org + "_" + repo)
 
     if (os.path.exists(repopath)):
         print("{} - pull".format(repopath))
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     for org in json.loads(config['Settings']['orgs']):
 
         repodir = config['Settings']['repodir']
-        repofile = repodir + "/" + org + "_repos.txt"
+        repofile = os.path.join(repodir, org + "_repos.txt")
         
         print("Outputting repos to {}".format(repofile))
 
