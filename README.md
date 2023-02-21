@@ -5,10 +5,10 @@ This scripts automates querying and backing up repositories from
 multiple users or organizations. It makes following directory structure
 
 ```
-github-backup/ORG1_repo1
-github-backup/ORG1_repo1
-github-backup/USER1_repo1
-github-backup/USER1_repo2
+github-backup/ORG1/repo1
+github-backup/ORG1/repo2
+github-backup/USER1/repo1
+github-backup/USER1/repo2
 ```
 
 where each repository is either cloned (1st time) or pulled to.
@@ -28,6 +28,18 @@ all the organization source codes to local servers.
 
 Example configuration conf-example.ini should be copied to conf.ini
 
+If you want token auth before script run, put your token in "token.txt" and
+uncomment following lines:
+
+//  # if login is necessary, uncomment 2 following lines and create token.txt
+
+// #print("Login with gh")
+
+//  #os.system(ghcommand + " auth login --with-token < token.txt > ghlog.txt 2>&1 ")
+
+
+If you want, you can use threading by uncommenting lines between THREADING START and THREADING END. Normally script runs one repository at a time sequentially. This seems to work ok
+in Mac OS with default settings where ulimit -n outputs 256. With threading, you need to maybe increase simultaneous files open limit if you have big repositories and/or many repositories. Increase can be done with ulimit -n 2048 for example.
 
 This script does following:
 
