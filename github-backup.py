@@ -24,15 +24,20 @@ def handle_repo(repo,org,repodir):
     repopath = os.path.join(repodir, org + "/" + repo)
 
     if (os.path.exists(repopath)):
-        print("{} - pull".format(repopath))
-        stream = os.popen('cd ' + repopath  + ' && git pull')
+        print("{} - fetch".format(repopath))
+        #stream = os.popen('cd ' + repopath  + ' && git pull --all')
+        stream = os.popen('cd ' + repopath  + ' && git fetch --update-head-ok')
         output = stream.read()
-        print("{} : {}".format(repopath,output))
+        if (output != ""):
+            print("{} : {}".format(repopath,output))
     else:
         print("{} - clone".format(repopath))
-        stream = os.popen('git clone git@github.com:'+ org + '/' + repo + '.git ' + repopath)
+        stream = os.popen('git clone --mirror git@github.com:'+ org + '/' + repo + '.git ' + repopath)
         output = stream.read()
         print("{} : {}".format(repopath,output))
+        #stream = os.popen('cd ' + repopath  + ' && git config --bool core.bare false')
+        #output = stream.read()
+        #print("{} : {}".format(repopath,output))
 
 
 # main program
@@ -48,7 +53,9 @@ if __name__ == "__main__":
     # if login is necessary, uncomment 2 following lines and create token.txt
     #print("Login with gh")
     #os.system(ghcommand + " auth login --with-token < token.txt > ghlog.txt 2>&1 ")
+    # for threading to work ?
 
+    os.system("ulimit -n 8000")
 
     # for each organization output repository list
     for org in json.loads(config['Settings']['orgs']):
@@ -73,18 +80,20 @@ if __name__ == "__main__":
         # ulimit -n 2048 for example could help
         for repo in repos:
             repo = repo.strip()
-            handle_repo(repo,org,repodir)
 
 #### THREADING START        
-            # create and call thread for one repository
-            #x = threading.Thread(target=handle_repo, args=(repo,org,repodir,))
 
-        #    threads.append(x)
-        #    x.start()
+            # without threading use this            
+            #handle_repo(repo,org,repodir)
+
+            # create and call thread for one repository
+            x = threading.Thread(target=handle_repo, args=(repo,org,repodir,))
+            threads.append(x)
+            x.start()
 
     # wait for each thread to end executing
-    #for index, thread in enumerate(threads):
-    #    thread.join()
+    for index, thread in enumerate(threads):
+        thread.join()
 
 #### THREADING END
 
