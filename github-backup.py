@@ -4,10 +4,12 @@ import os
 import threading
 import configparser
 import json
+import zipfile
 
 # Backs up github code by clone & pull
 # 
-# 9.11.2022 
+# 9.11.2022     Initial version
+# 24.11.2024    Added zip to onedrive or dropbox
 #
 # Henry Palonen / PalonenLABS Oy
 
@@ -61,6 +63,7 @@ if __name__ == "__main__":
     for org in json.loads(config['Settings']['orgs']):
 
         repodir = config['Settings']['repodir']
+        zipdir = config['Settings']['zipdir']
         repofile = os.path.join(repodir, org + "/" + org + "_repos.txt")
         ghcommand = config['Settings']['ghcommand']
 
@@ -81,19 +84,27 @@ if __name__ == "__main__":
         for repo in repos:
             repo = repo.strip()
 
+            # without threading use this            
+            handle_repo(repo,org,repodir)
+        
+        # and finally zip and retain zip file for one month
+        zip_file_name = repodir + '/' + org + "_" + now.strftime("%d") + '.zip'
+        # zip file
+        os.system('zip -q -r ' + zip_file_name + ' ' + repodir + '/' + org)
+        # and copy to zip directory to OneCloud or Dropbox
+        os.system('cp -f ' + zip_file_name + ' ' + zipdir)
+        
+
 #### THREADING START        
 
-            # without threading use this            
-            #handle_repo(repo,org,repodir)
-
             # create and call thread for one repository
-            x = threading.Thread(target=handle_repo, args=(repo,org,repodir,))
-            threads.append(x)
-            x.start()
+#            x = threading.Thread(target=handle_repo, args=(repo,org,repodir,))
+#            threads.append(x)
+#            x.start()
 
     # wait for each thread to end executing
-    for index, thread in enumerate(threads):
-        thread.join()
+#    for index, thread in enumerate(threads):
+#        thread.join()
 
 #### THREADING END
 
